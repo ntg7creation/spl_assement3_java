@@ -3,7 +3,7 @@ package bgu.spl.net.messages;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-public class Register implements Message{
+public class Register implements MyMessage{
 	
 	private String username;
 	private String password;
@@ -68,6 +68,12 @@ public class Register implements Message{
 		}
 
 		bytesOfUserName[len++] = nextByte;
+	}
+
+
+	@Override
+	public byte[] encode() {
+		throw new IllegalArgumentException("this message cant be encoded");
 	}
 
 

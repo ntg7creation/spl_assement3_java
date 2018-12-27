@@ -2,10 +2,10 @@ package bgu.spl.net.messages;
 
 import java.nio.charset.StandardCharsets;
 
-public class Post implements Message{ {
-	
+public class Post implements MyMessage {
+
 	private String content;
-	
+
 	public Post(byte[] b) {
 		content = new String(b, 0, b.length, StandardCharsets.UTF_8);
 	}
@@ -29,4 +29,9 @@ public class Post implements Message{ {
 	public Object get5() {
 		throw new IllegalArgumentException("Post messege dosent have a 5'th element");
 	}
-} 
+
+	@Override
+	public byte[] encode() {
+		throw new IllegalArgumentException("this message cant be encoded");
+	}
+}

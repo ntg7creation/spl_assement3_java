@@ -1,6 +1,6 @@
 package bgu.spl.net.messages;
 
-public interface Message {
+public interface MyMessage {
 	
 
 	
@@ -11,5 +11,5 @@ public interface Message {
 	public Object get4();
 	public Object get5();
 	
-
+	public byte[] encode();
 }
