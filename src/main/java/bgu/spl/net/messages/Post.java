@@ -29,4 +29,11 @@ public class Post implements MyMessage{
 	public Object get5() {
 		throw new IllegalArgumentException("Post messege dosent have a 5'th element");
 	}
+
+	
+	@Override
+	public byte[] encode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 } 
