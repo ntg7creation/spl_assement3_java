@@ -49,4 +49,9 @@ public class Notification implements MyMessage {
 		// TODO Auto-generated method stub
 		return "9".getBytes() ;
 	}
+
+	@Override
+	public MessageOp get_type() {
+		return MessageOp.Notification;
+	}
 }

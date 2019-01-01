@@ -55,4 +55,9 @@ public class privateMessage implements MyMessage {
 		return null;
 	}
 
+	@Override
+	public MessageOp get_type() {
+		return MessageOp.PM;
+	}
+
 }

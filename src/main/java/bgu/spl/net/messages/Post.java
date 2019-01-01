@@ -36,4 +36,9 @@ public class Post implements MyMessage{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public MessageOp get_type() {
+		return MessageOp.Post;
+	}
 } 

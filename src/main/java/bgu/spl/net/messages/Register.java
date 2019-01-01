@@ -76,6 +76,12 @@ public class Register implements MyMessage{
 		throw new IllegalArgumentException("this message cant be encoded");
 	}
 
+	@Override
+	public MessageOp get_type() {
+		return MessageOp.Register;
+	}
+
+
 
 	
 }

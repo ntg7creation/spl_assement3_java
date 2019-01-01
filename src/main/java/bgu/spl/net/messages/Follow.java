@@ -60,4 +60,9 @@ public class Follow implements MyMessage {
 		return null;
 	}
 
+	@Override
+	public MessageOp get_type() {
+		return MessageOp.Follow;
+	}
+
 }

@@ -49,4 +49,9 @@ public class Stats implements MyMessage {
 		return null;
 	}
 
+	@Override
+	public MessageOp get_type() {
+		return MessageOp.Stats;
+	}
+
 }

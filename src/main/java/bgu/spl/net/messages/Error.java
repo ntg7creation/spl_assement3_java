@@ -36,4 +36,10 @@ public class Error implements MyMessage {
 	public byte[] encode() {
 		throw new IllegalArgumentException("Error has no use to encode function, the constructor does it");
 	}
+
+	@Override
+	public MessageOp get_type() {
+		return MessageOp.Error;
+	}
+
 }
