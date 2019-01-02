@@ -1,5 +1,6 @@
 package bgu.spl.net.api.bidi;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import bgu.spl.net.messages.Ack;
@@ -10,7 +11,7 @@ import bgu.spl.net.messages.MyMessage;
 public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 	private int myconnectionID;
-	private MyConnections myConnection;
+	private Connections<MyMessage> myConnection;
 	private Boolean wantToTerminate;
 	private MyMessage msg;
 	// private MyMessage msgToReturn;
@@ -24,7 +25,7 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 	@Override
 	public void start(int connectionId, Connections<MyMessage> connections) {
 		myconnectionID = connectionId;
-		myConnection = (MyConnections) connections;
+		myConnection = connections;
 
 	}
 
@@ -124,8 +125,18 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 	private Runnable PostAction() {
 		return () -> {
 			if (myConnection.isLogedIn(myconnectionID)) {
+				String str = (String) msg.get1();
+				List<String> sendTo = new LinkedList<String>();
+				String[] splited = str.split(" ");
+				String newstr = "";
+				for (String s : splited) {
+					if (s.charAt(0) == '@')
+						sendTo.add(s);
+					else
+						newstr += s + " ";
+				}
 
-				myConnection.post(myconnectionID, (String) msg.get1(), (List<String>) msg.get2());
+				myConnection.post(myconnectionID, newstr, sendTo);
 				myConnection.send(myconnectionID, new Ack(MessageOp.Post));
 			} else
 				myConnection.send(myconnectionID, new Error((short) MessageOp.Post.getValue()));
@@ -139,17 +150,19 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 	}
 
 	private Runnable UserAction() {
-		
-		
-		
-		
 		return () -> {
 			if (myConnection.isLogedIn(myconnectionID)) {
 				List<String> users = myConnection.getNames();
 				String names = "";
-				short number = 0;
+				short number = (short) users.size();
 				byte[] inbytes = new byte[2];
+				
 				// make string
+				for (String s : users) {
+					names += s + '\0';
+
+				}
+
 				myConnection.send(myconnectionID, new Ack(MessageOp.User, inbytes, names));
 			} else
 				myConnection.send(myconnectionID, new Error((short) MessageOp.User.getValue()));
