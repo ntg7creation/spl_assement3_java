@@ -1,5 +1,6 @@
 package bgu.spl.net.api.bidi;
 
+import bgu.spl.net.messages.Ack;
 import bgu.spl.net.messages.MessageOp;
 import bgu.spl.net.messages.MyMessage;
 
@@ -8,6 +9,8 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 	private int myconnectionID;
 	private Connections<MyMessage> myConnection;
 	private Boolean wantToTerminate;
+	private MyMessage msg;
+	private MyMessage msgToReturn;
 
 	public MyMessagingProtocol() {
 		myconnectionID = -1;
@@ -24,6 +27,7 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 	@Override
 	public void process(MyMessage message) {
+		this.msg = message;
 		getAction(message.get_type()).run();
 	}
 
@@ -83,6 +87,14 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 	private Runnable LoginAction() {
 		return () -> {
+			boolean isExist = this.myConnection.isInUserList((String) msg.get1());
+			if (isExist) {
+				boolean correctPassword = this.myConnection.insertToLogedIn(myconnectionID, (String)msg.get1());
+				if (!correctPassword) {
+					//sent Error
+				}
+					
+			}
 		};
 	}
 
