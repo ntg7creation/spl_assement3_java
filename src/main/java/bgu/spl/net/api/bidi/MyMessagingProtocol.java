@@ -102,13 +102,11 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 				boolean secLog = this.myConnection.insertToLogedIn(myconnectionID, (String) msg.get1());
 				if (!secLog) {
 					myConnection.send(myconnectionID, new Error((short) msg.get_type().getValue()));
-				}
-				else {
+				} else {
 					myConnection.send(myconnectionID, new Ack(msg.get_type()));
 				}
 
-			}
-			else {
+			} else {
 				myConnection.send(myconnectionID, new Error((short) msg.get_type().getValue()));
 			}
 		};
@@ -125,6 +123,7 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 	private Runnable FollowAction() {
 		return () -> { 
+
 			if (myConnection.isLogedIn(myconnectionID)) {
 				if ((int)msg.get1() == 0) {
 					myConnection.follow(myconnectionID, (List<String>) msg.get3());
@@ -136,6 +135,7 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 			else {
 				myConnection.send(myconnectionID, new Error((short) msg.get_type().getValue()));
 			}
+
 		};
 	}
 
@@ -163,17 +163,20 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 	}
 
 	private Runnable UserAction() {
-		
-		
-		
-		
+
 		return () -> {
 			if (myConnection.isLogedIn(myconnectionID)) {
 				List<String> users = myConnection.getNames();
 				String names = "";
 				short number = 0;
 				byte[] inbytes = new byte[2];
-				// make string
+
+				inbytes[0] = (byte) (number & 0xff);
+				inbytes[1] = (byte) ((number >> 8) & 0xff);
+
+				for (String s : users) {
+					names += s + '\0';
+				}
 				myConnection.send(myconnectionID, new Ack(MessageOp.User, inbytes, names));
 			} else
 				myConnection.send(myconnectionID, new Error((short) MessageOp.User.getValue()));

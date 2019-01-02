@@ -123,4 +123,13 @@ public class Connectionimpl implements Connections<MyMessage>{
 		return null;
 	}
 
+
+
+
+	@Override
+	public Costumer getCostumer(int connectionId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
