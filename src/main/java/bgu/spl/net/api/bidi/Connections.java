@@ -22,7 +22,7 @@ public interface Connections<T> {
 
 	boolean isInUserList(String userName);
 
-	boolean insertToLogedIn(int connectionId, String userName);
+	boolean insertToLogedIn(int connectionId, String userName, String password);
 
 	boolean insertToUserList(String userName, String password);
 

@@ -99,7 +99,7 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 		return () -> {
 			boolean isExist = this.myConnection.isInUserList((String) msg.get1());
 			if (isExist) {
-				boolean secLog = this.myConnection.insertToLogedIn(myconnectionID, (String) msg.get1());
+				boolean secLog = this.myConnection.insertToLogedIn(myconnectionID, (String) msg.get1(), (String)msg.get2());
 				if (!secLog) {
 					myConnection.send(myconnectionID, new Error((short) msg.get_type().getValue()));
 				} else {
