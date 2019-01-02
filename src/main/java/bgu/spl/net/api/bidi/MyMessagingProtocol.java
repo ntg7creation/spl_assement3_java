@@ -6,7 +6,7 @@ import bgu.spl.net.messages.MyMessage;
 public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 	private int myconnectionID;
-	private Connections<MyMessage> myConnection;
+	private MyConnections myConnection;
 	private Boolean wantToTerminate;
 
 	public MyMessagingProtocol() {
@@ -18,7 +18,7 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 	@Override
 	public void start(int connectionId, Connections<MyMessage> connections) {
 		myconnectionID = connectionId;
-		myConnection = connections;
+		myConnection =  (MyConnections) connections;
 
 	}
 
