@@ -125,7 +125,17 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 	private Runnable FollowAction() {
 		return () -> { 
-			myConnection.follow(myConnection.getCostumer(connectionId), names)
+			if (myConnection.isLogedIn(myconnectionID)) {
+				if ((int)msg.get1() == 0) {
+					myConnection.follow(myconnectionID, (List<String>) msg.get3());
+				}
+				else {
+					myConnection.unfollow(myconnectionID, (List<String>) msg.get3());
+				}
+			}
+			else {
+				myConnection.send(myconnectionID, new Error((short) msg.get_type().getValue()));
+			}
 		};
 	}
 
@@ -142,7 +152,13 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 	private Runnable PMAction() {
 		return () -> {
+			if (myConnection.isLogedIn(myconnectionID)&& myConnection.isInUserList((String)msg.get1())) {
+				
 
+				myConnection.send((String)msg.get1(), (String) msg.get2());
+				myConnection.send(myconnectionID, new Ack(MessageOp.PM));
+			} else
+				myConnection.send(myconnectionID, new Error((short) MessageOp.PM.getValue()));
 		};
 	}
 

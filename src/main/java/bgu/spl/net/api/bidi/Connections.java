@@ -8,6 +8,8 @@ public interface Connections<T> {
 
 	boolean send(String name,String msg);
 	
+	
+	
 	void broadcast(T msg);
 
 	void disconnect(int connectionId);
@@ -23,6 +25,7 @@ public interface Connections<T> {
 	boolean insertToLogedIn(int connectionId, String userName);
 
 	boolean insertToUserList(String userName, String password);
+
 
 	List<String> follow(int connectionId, List<String> names);
 	
