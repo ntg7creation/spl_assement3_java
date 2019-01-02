@@ -1,6 +1,19 @@
 package bgu.spl.net.api.bidi;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 public class Connectionimpl implements Connections{
+	
+	private Map<String, Costumer> userMap;
+	private Map<Integer, String> logedInMap;
+	
+	
+	public Connectionimpl() {
+		userMap = new WeakHashMap<>();
+		logedInMap = new WeakHashMap<>();
+	}
+	
 
 	@Override
 	public boolean send(int connectionId, Object msg) {
@@ -22,14 +35,12 @@ public class Connectionimpl implements Connections{
 
 	@Override
 	public boolean isLogedIn(int connectionId) {
-		// TODO Auto-generated method stub
-		return false;
+		return logedInMap.containsKey(connectionId);
 	}
 
 	@Override
 	public boolean isInUserList(String userName) {
-		// TODO Auto-generated method stub
-		return false;
+		return userMap.containsKey(userName);
 	}
 
 	@Override
