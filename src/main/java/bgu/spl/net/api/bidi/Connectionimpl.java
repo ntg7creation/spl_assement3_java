@@ -1,35 +1,31 @@
 package bgu.spl.net.api.bidi;
 
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-public class Connectionimpl implements Connections{
+import bgu.spl.net.messages.MyMessage;
+import bgu.spl.net.srv.ConnectionHandler;
+
+public class Connectionimpl implements Connections<MyMessage>{
 	
 	private Map<String, Costumer> userMap;
 	private Map<Integer, String> logedInMap;
+	private Map<Integer,ConnectionHandler> handlersMap;
 	
 	
 	public Connectionimpl() {
 		userMap = new WeakHashMap<>();
 		logedInMap = new WeakHashMap<>();
+		handlersMap = new  WeakHashMap<>();
 	}
 	
 
-	@Override
-	public boolean send(int connectionId, Object msg) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
-	@Override
-	public void broadcast(Object msg) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void disconnect(int connectionId) {
-		// TODO Auto-generated method stub
+		handlersMap.remove(connectionId);
 		
 	}
 
@@ -50,17 +46,61 @@ public class Connectionimpl implements Connections{
 		
 	}
 
-	@Override
-	public boolean insertToUserList(String userName) {
-		return false;
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
 	public Costumer getCostumer(String userName) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public boolean send(String name, String msg) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public void post(int connectionId, String msg, List to) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public boolean logout(int connectionId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean insertToUserList(String userName, String password) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public List getNames() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public boolean send(int connectionId, MyMessage msg) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public void broadcast(MyMessage msg) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
