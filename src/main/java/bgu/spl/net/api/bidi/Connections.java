@@ -24,7 +24,6 @@ public interface Connections<T> {
 
 	boolean insertToUserList(String userName, String password);
 
-
 	List<String> follow(int connectionId, List<String> names);
 	
 	List<String> unfollow(int connectionId,List<String> names);
