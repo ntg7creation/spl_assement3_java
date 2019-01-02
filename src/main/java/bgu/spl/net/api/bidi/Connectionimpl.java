@@ -55,6 +55,8 @@ public class Connectionimpl implements Connections<MyMessage>{
 	}
 
 
+	
+
 	@Override
 	public boolean send(String name, String msg) {
 		// TODO Auto-generated method stub
@@ -108,7 +110,7 @@ public class Connectionimpl implements Connections<MyMessage>{
 
 	@Override
 	public List<String> follow(int connectionId, List<String> names) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -117,6 +119,15 @@ public class Connectionimpl implements Connections<MyMessage>{
 
 	@Override
 	public List<String> unfollow(int connectionId, List<String> names) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+
+	@Override
+	public Costumer getCostumer(int connectionId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

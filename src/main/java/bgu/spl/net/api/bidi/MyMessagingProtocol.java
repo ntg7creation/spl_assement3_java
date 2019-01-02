@@ -1,6 +1,6 @@
 package bgu.spl.net.api.bidi;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import bgu.spl.net.messages.Ack;
@@ -99,11 +99,15 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 		return () -> {
 			boolean isExist = this.myConnection.isInUserList((String) msg.get1());
 			if (isExist) {
-				boolean correctPassword = this.myConnection.insertToLogedIn(myconnectionID, (String) msg.get1());
-				if (!correctPassword) {
-					// sent Error
+				boolean secLog = this.myConnection.insertToLogedIn(myconnectionID, (String) msg.get1());
+				if (!secLog) {
+					myConnection.send(myconnectionID, new Error((short) msg.get_type().getValue()));
+				} else {
+					myConnection.send(myconnectionID, new Ack(msg.get_type()));
 				}
 
+			} else {
+				myConnection.send(myconnectionID, new Error((short) msg.get_type().getValue()));
 			}
 		};
 	}
@@ -118,25 +122,16 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 	}
 
 	private Runnable FollowAction() {
-		return () -> {
+		return () -> { 
+		//	myConnection.follow(myConnection.getCostumer(connectionId), names)
 		};
 	}
 
 	private Runnable PostAction() {
 		return () -> {
 			if (myConnection.isLogedIn(myconnectionID)) {
-				String str = (String) msg.get1();
-				List<String> sendTo = new LinkedList<String>();
-				String[] splited = str.split(" ");
-				String newstr = "";
-				for (String s : splited) {
-					if (s.charAt(0) == '@')
-						sendTo.add(s);
-					else
-						newstr += s + " ";
-				}
 
-				myConnection.post(myconnectionID, newstr, sendTo);
+				myConnection.post(myconnectionID, (String) msg.get1(), (List<String>) msg.get2());
 				myConnection.send(myconnectionID, new Ack(MessageOp.Post));
 			} else
 				myConnection.send(myconnectionID, new Error((short) MessageOp.Post.getValue()));
@@ -150,20 +145,20 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 	}
 
 	private Runnable UserAction() {
+
 		return () -> {
 			if (myConnection.isLogedIn(myconnectionID)) {
 				List<String> users = myConnection.getNames();
 				String names = "";
-				short number = (short) users.size();
+				short number = 0;
 				byte[] inbytes = new byte[2];
-				inbytes[0] = (byte)(number & 0xff);
-				inbytes[1] = (byte)((number >> 8) & 0xff);
+
+				inbytes[0] = (byte) (number & 0xff);
+				inbytes[1] = (byte) ((number >> 8) & 0xff);
 
 				for (String s : users) {
 					names += s + '\0';
-
 				}
-
 				myConnection.send(myconnectionID, new Ack(MessageOp.User, inbytes, names));
 			} else
 				myConnection.send(myconnectionID, new Error((short) MessageOp.User.getValue()));
