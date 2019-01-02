@@ -156,8 +156,9 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 				String names = "";
 				short number = (short) users.size();
 				byte[] inbytes = new byte[2];
-				
-				// make string
+				inbytes[0] = (byte)(number & 0xff);
+				inbytes[1] = (byte)((number >> 8) & 0xff);
+
 				for (String s : users) {
 					names += s + '\0';
 
