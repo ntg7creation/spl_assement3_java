@@ -32,5 +32,7 @@ public interface Connections<T> {
 	
 	Costumer getCostumer(String userName);
 
+	Costumer getCostumer(int connectionId);
+	
 	List<String> getNames();
 }

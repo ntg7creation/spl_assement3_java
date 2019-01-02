@@ -108,7 +108,7 @@ public class Connectionimpl implements Connections<MyMessage>{
 
 	@Override
 	public List<String> follow(int connectionId, List<String> names) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
