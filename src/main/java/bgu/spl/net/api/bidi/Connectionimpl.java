@@ -55,6 +55,8 @@ public class Connectionimpl implements Connections<MyMessage>{
 	}
 
 
+	
+
 	@Override
 	public boolean send(String name, String msg) {
 		// TODO Auto-generated method stub
