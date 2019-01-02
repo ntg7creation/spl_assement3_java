@@ -1,6 +1,9 @@
 package bgu.spl.net.api.bidi;
 
+import java.util.List;
+
 import bgu.spl.net.messages.Ack;
+import bgu.spl.net.messages.Error;
 import bgu.spl.net.messages.MessageOp;
 import bgu.spl.net.messages.MyMessage;
 
@@ -10,18 +13,18 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 	private MyConnections myConnection;
 	private Boolean wantToTerminate;
 	private MyMessage msg;
-	private MyMessage msgToReturn;
+	// private MyMessage msgToReturn;
 
 	public MyMessagingProtocol() {
 		myconnectionID = -1;
 		myConnection = null;
-		wantToTerminate =false;
+		wantToTerminate = false;
 	}
 
 	@Override
 	public void start(int connectionId, Connections<MyMessage> connections) {
 		myconnectionID = connectionId;
-		myConnection =  (MyConnections) connections;
+		myConnection = (MyConnections) connections;
 
 	}
 
@@ -82,24 +85,34 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 	private Runnable RegisterAction() {
 		return () -> {
+			if (!myConnection.isInUserList((String) msg.get1())
+					&& myConnection.insertToUserList((String) msg.get1(), (String) msg.get2()))
+				myConnection.send(myconnectionID, new Ack(msg.get_type()));
+			else
+				myConnection.send(myconnectionID, new Error((short) msg.get_type().getValue()));
 		};
+
 	}
 
 	private Runnable LoginAction() {
 		return () -> {
 			boolean isExist = this.myConnection.isInUserList((String) msg.get1());
 			if (isExist) {
-				boolean correctPassword = this.myConnection.insertToLogedIn(myconnectionID, (String)msg.get1());
+				boolean correctPassword = this.myConnection.insertToLogedIn(myconnectionID, (String) msg.get1());
 				if (!correctPassword) {
-					//sent Error
+					// sent Error
 				}
-					
+
 			}
 		};
 	}
 
 	private Runnable LogoutAction() {
 		return () -> {
+			if (myConnection.isLogedIn(myconnectionID) && myConnection.logout(myconnectionID))
+				myConnection.send(myconnectionID, new Ack(MessageOp.Logout));
+			else
+				myConnection.send(myconnectionID, new Error((short) MessageOp.Logout.getValue()));
 		};
 	}
 
@@ -110,16 +123,36 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 	private Runnable PostAction() {
 		return () -> {
+			if (myConnection.isLogedIn(myconnectionID)) {
+
+				myConnection.post(myconnectionID, (String) msg.get1(), (List<String>) msg.get2());
+				myConnection.send(myconnectionID, new Ack(MessageOp.Post));
+			} else
+				myConnection.send(myconnectionID, new Error((short) MessageOp.Post.getValue()));
 		};
 	}
 
 	private Runnable PMAction() {
 		return () -> {
+
 		};
 	}
 
 	private Runnable UserAction() {
+		
+		
+		
+		
 		return () -> {
+			if (myConnection.isLogedIn(myconnectionID)) {
+				List<String> users = myConnection.getNames();
+				String names = "";
+				short number = 0;
+				byte[] inbytes = new byte[2];
+				// make string
+				myConnection.send(myconnectionID, new Ack(MessageOp.User, inbytes, names));
+			} else
+				myConnection.send(myconnectionID, new Error((short) MessageOp.User.getValue()));
 		};
 	}
 

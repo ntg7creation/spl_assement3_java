@@ -22,4 +22,39 @@ public class MyConnections implements Connections<MyMessage> {
 		
 	}
 
+	@Override
+	public boolean isLogedIn(int connectionId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isInUserList(String userName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean insertToLogedIn(int connectionId, String userName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean insertToUserList(String userName, String password) {
+		// TODO Auto-generated method stub
+		//may need sync
+		return false;
+	}
+	
+
+	@Override
+	public Costumer getCostumer(String userName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
 }

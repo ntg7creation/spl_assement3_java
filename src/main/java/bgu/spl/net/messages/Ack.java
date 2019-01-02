@@ -5,9 +5,14 @@ public class Ack implements MyMessage {
 	private MessageOp hisType;
 	private String opption;
 
-	public Ack(MessageOp mytype, String opption) {
+	public Ack(MessageOp mytype, byte[] moreStuff, String opption) {
 		this.hisType = mytype;
 		this.opption = opption;
+	}
+
+	public Ack(MessageOp mytype) {
+		this.hisType = mytype;
+		this.opption = "";
 	}
 
 	@Override
