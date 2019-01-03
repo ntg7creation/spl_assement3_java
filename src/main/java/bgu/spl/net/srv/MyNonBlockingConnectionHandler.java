@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import bgu.spl.net.api.MessageEncoderDecoderImp;
+import bgu.spl.net.api.bidi.Connections;
 import bgu.spl.net.api.bidi.MyMessagingProtocol;
 import bgu.spl.net.messages.MyMessage;
 import bgu.spl.net.srv.bidi.ConnectionHandler;
@@ -24,11 +25,12 @@ public class MyNonBlockingConnectionHandler implements ConnectionHandler<MyMessa
 	private final Reactor<MyMessage> reactor;
 
 	public MyNonBlockingConnectionHandler(MessageEncoderDecoderImp reader, MyMessagingProtocol protocol, SocketChannel chan,
-			Reactor<MyMessage> reactor) {
+			Reactor<MyMessage> reactor,Connections<MyMessage> connections,int ConnectionID) {
 		this.chan = chan;
 		this.encdec = reader;
 		this.protocol = protocol;
 		this.reactor = reactor;
+		protocol.start(ConnectionID, connections);
 	}
 
 	public Runnable continueRead() {
