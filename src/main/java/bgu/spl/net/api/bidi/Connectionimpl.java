@@ -42,18 +42,19 @@ public class Connectionimpl implements Connections<MyMessage>{
 	}
 
 	@Override
-	public boolean insertToLogedIn(int connectionId, String userName) {
+	public boolean insertToLogedIn(int connectionId, String userName, String password) {
+		if (this.isLogedIn(connectionId) && this.getCostumer(connectionId).cheackPassword(password) && !this.isLogedIn(connectionId)) {
+			this.insertToLogedIn(connectionId, userName, password);
+			return true;
+		}
 		return false;
-		// TODO Auto-generated method stub
-		
 	}
 
 
 
 	@Override
 	public Costumer getCostumer(String userName) {
-		// TODO Auto-generated method stub
-		return null;
+		return userMap.get(userName);
 	}
 
 
