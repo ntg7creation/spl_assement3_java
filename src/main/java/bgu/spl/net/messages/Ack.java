@@ -33,17 +33,7 @@ public class Ack implements MyMessage {
 		return null;
 	}
 
-	@Override
-	public Object get4() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public Object get5() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public byte[] encode() {

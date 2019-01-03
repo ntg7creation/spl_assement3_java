@@ -13,12 +13,12 @@ public class Login implements MyMessage {
 			end++;
 
 		username = new String(b, start, end);
-		
+
 		end++;
 		start = end;
-		while(end<b.length && b[end]!='\0')
+		while (end < b.length && b[end] != '\0')
 			end++;
-		password = new String(b,start,end);
+		password = new String(b, start, end);
 	}
 
 	@Override
@@ -36,23 +36,12 @@ public class Login implements MyMessage {
 		throw new IllegalArgumentException("no item 3 in this type of messge");
 	}
 
-	@Override
-	public Object get4() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public Object get5() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public byte[] encode() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	@Override
 	public MessageOp get_type() {
 		return MessageOp.Login;

@@ -45,15 +45,6 @@ public class Register implements MyMessage{
 		throw new IllegalArgumentException("Register messege dosent have a 3'th element");
 	}
 	
-	public Object get4() {
-		throw new IllegalArgumentException("Register messege dosent have a 4'th element");
-	}
-	
-	public Object get5() {
-		throw new IllegalArgumentException("Register messege dosent have a 5'th element");
-	}
-
-
 	private void pushByteOfPassword(byte nextByte) {
 		if (len >= bytesOfPassword.length) {
 			bytesOfPassword = Arrays.copyOf(bytesOfPassword, len * 2);

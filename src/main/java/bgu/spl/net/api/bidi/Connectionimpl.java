@@ -3,21 +3,22 @@ package bgu.spl.net.api.bidi;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import bgu.spl.net.messages.MyMessage;
 import bgu.spl.net.srv.ConnectionHandler;
 
 public class Connectionimpl implements Connections<MyMessage>{
 	
-	private Map<String, Costumer> userMap;
-	private Map<Integer, String> logedInMap;
-	private Map<Integer,ConnectionHandler> handlersMap;
+	private ConcurrentHashMap<String, Costumer> userMap;
+	private ConcurrentHashMap<Integer, String> logedInMap;
+	private ConcurrentHashMap<Integer,ConnectionHandler<MyMessage>> handlersMap;
 	
 	
 	public Connectionimpl() {
-		userMap = new WeakHashMap<>();
-		logedInMap = new WeakHashMap<>();
-		handlersMap = new  WeakHashMap<>();
+		userMap = new ConcurrentHashMap<>();
+		logedInMap = new ConcurrentHashMap<>();
+		handlersMap = new  ConcurrentHashMap<>();
 	}
 	
 
@@ -25,7 +26,8 @@ public class Connectionimpl implements Connections<MyMessage>{
 
 	@Override
 	public void disconnect(int connectionId) {
-		handlersMap.remove(connectionId);
+		logedInMap.remove(connectionId);
+		//handlersMap.remove(connectionId);
 		
 	}
 
