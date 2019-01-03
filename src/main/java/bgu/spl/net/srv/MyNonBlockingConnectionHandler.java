@@ -17,6 +17,7 @@ public class MyNonBlockingConnectionHandler implements ConnectionHandler<MyMessa
 
 	private static final int BUFFER_ALLOCATION_SIZE = 1 << 13; // 8k
 	private static final ConcurrentLinkedQueue<ByteBuffer> BUFFER_POOL = new ConcurrentLinkedQueue<>();
+	private static int connectionID = 1;
 
 	private final MyMessagingProtocol protocol;
 	private final MessageEncoderDecoderImp encdec;
@@ -24,13 +25,14 @@ public class MyNonBlockingConnectionHandler implements ConnectionHandler<MyMessa
 	private final SocketChannel chan;
 	private final Reactor<MyMessage> reactor;
 
-	public MyNonBlockingConnectionHandler(MessageEncoderDecoderImp reader, MyMessagingProtocol protocol, SocketChannel chan,
-			Reactor<MyMessage> reactor,Connections<MyMessage> connections,int ConnectionID) {
+	public MyNonBlockingConnectionHandler(MessageEncoderDecoderImp reader, MyMessagingProtocol protocol,
+			SocketChannel chan, Reactor<MyMessage> reactor, Connections<MyMessage> connections) {
 		this.chan = chan;
 		this.encdec = reader;
 		this.protocol = protocol;
 		this.reactor = reactor;
-		protocol.start(ConnectionID, connections);
+		protocol.start(connectionID, connections);
+		connectionID++;
 	}
 
 	public Runnable continueRead() {

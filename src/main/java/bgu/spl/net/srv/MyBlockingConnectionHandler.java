@@ -19,13 +19,15 @@ public class MyBlockingConnectionHandler implements Runnable, ConnectionHandler<
 	private BufferedInputStream in;
 	private BufferedOutputStream out;
 	private volatile boolean connected = true;
+	private static int connectionID = 1;
 
 	public MyBlockingConnectionHandler(Socket sock, MessageEncoderDecoder<MyMessage> reader,
-			BidiMessagingProtocol<MyMessage> protocol, Connections<MyMessage> connections, int ConnectionID) {
+			BidiMessagingProtocol<MyMessage> protocol, Connections<MyMessage> connections) {
 		this.sock = sock;
 		this.encdec = reader;
 		this.protocol = protocol;
-		protocol.start(ConnectionID, connections);
+		protocol.start(connectionID, connections);
+		connectionID++;
 	}
 
 	@Override
