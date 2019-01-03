@@ -1,34 +1,56 @@
 package bgu.spl.net.api.bidi;
 
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import bgu.spl.net.messages.MyMessage;
-import bgu.spl.net.srv.ConnectionHandler;
+import bgu.spl.net.messages.Notification;
+import bgu.spl.net.srv.bidi.ConnectionHandler;
 
-public class Connectionimpl implements Connections<MyMessage>{
-	
-	private ConcurrentHashMap<String, Costumer> userMap;
+public class Connectionimpl implements Connections<MyMessage> {
+
+	private ConcurrentHashMap<String, Costumer> userMap; // registers
 	private ConcurrentHashMap<Integer, String> logedInMap;
-	private ConcurrentHashMap<Integer,ConnectionHandler<MyMessage>> handlersMap;
-	
-	
+	private ConcurrentHashMap<Integer, ConnectionHandler<MyMessage>> handlersMap;
+
 	public Connectionimpl() {
 		userMap = new ConcurrentHashMap<>();
 		logedInMap = new ConcurrentHashMap<>();
-		handlersMap = new  ConcurrentHashMap<>();
+		handlersMap = new ConcurrentHashMap<>();
 	}
-	
 
+	@Override
+	public boolean send(int connectionId, MyMessage msg) {
+		if (handlersMap.contains(connectionId)) {
+			try {
+				handlersMap.get(connectionId).send(msg);
+				return true;
+			} catch (Exception e) {
+				System.out.println("user probly logout while about to recive a msg");
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
 
+	@Override
+	public boolean send(String name, String msg, byte type) {
+		if (userMap.containsKey(name)) {
+			int connectionId = userMap.get(name).getLastConnectedID();
+			if (isLogedIn(connectionId) && logedInMap.get(connectionId) == name) {
+				if (!send(connectionId, new Notification(type, name, msg)))
+					userMap.get(name).addMessage(new Notification(type, name, msg));
+			} else
+				userMap.get(name).addMessage(new Notification(type, name, msg));
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public void disconnect(int connectionId) {
 		logedInMap.remove(connectionId);
-		//handlersMap.remove(connectionId);
-		
 	}
 
 	@Override
@@ -43,82 +65,73 @@ public class Connectionimpl implements Connections<MyMessage>{
 
 	@Override
 	public boolean insertToLogedIn(int connectionId, String userName, String password) {
-		if (this.isLogedIn(connectionId) && this.getCostumer(connectionId).cheackPassword(password) && !this.isLogedIn(connectionId)) {
-			this.insertToLogedIn(connectionId, userName, password);
+		if (!isLogedIn(connectionId) && userMap.get(logedInMap.get(connectionId)).cheackPassword(password)) {
+			insertToLogedIn(connectionId, userName, password);
 			return true;
 		}
 		return false;
 	}
 
-
-
-	@Override
-	public Costumer getCostumer(String userName) {
-		return userMap.get(userName);
-	}
-
-
-	
+	// @Override
+	// public Costumer getCostumer(String userName) {
+	// return userMap.get(userName);
+	// }
 
 	@Override
-	public boolean send(String name, String msg) {
-		// TODO Auto-generated method stub
-		return false;
+	public void post(int connection, String msg, List<String> to) {
+		if (isLogedIn(connection)) {
+
+			List<String> myFollwers = userMap.get(logedInMap.get(connection)).getFollwerList();
+			for (String name : myFollwers) {
+				if (!to.contains(name))
+					to.add(name);
+			}
+
+			for (String name : to)
+				send(name, msg, (byte) 1);
+
+		}
 	}
-
-
-	@Override
-	public void post(int connectionId, String msg, List to) {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 	@Override
 	public boolean logout(int connectionId) {
-		// TODO Auto-generated method stub
+		if (isLogedIn(connectionId)) {
+			disconnect(connectionId);
+			return true;
+		}
 		return false;
 	}
-
 
 	@Override
 	public boolean insertToUserList(String userName, String password) {
-		// TODO Auto-generated method stub
+		// Maybe add a sync here
+		if (!isInUserList(userName)) {
+			userMap.put(userName, new Costumer(userName, password));
+			return true;
+		}
 		return false;
 	}
 
-
 	@Override
-	public List getNames() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<String> getNames() {
+		return userMap.keySet();
 	}
 
-
-	@Override
-	public boolean send(int connectionId, MyMessage msg) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
+	//never used
 	@Override
 	public void broadcast(MyMessage msg) {
-		// TODO Auto-generated method stub
-		
+		Set<Integer> all_log_in = logedInMap.keySet();
+		for (Integer connetion : all_log_in) {
+			send(connetion, msg);
+		}
+
 	}
-
-
-
 
 	@Override
 	public List<String> follow(int connectionId, List<String> names) {
-		
+		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
 
 	@Override
 	public List<String> unfollow(int connectionId, List<String> names) {
@@ -126,13 +139,21 @@ public class Connectionimpl implements Connections<MyMessage>{
 		return null;
 	}
 
-
-
+	// @Override
+	// public Costumer getCostumer(int connectionId) {
+	// // TODO Auto-generated method stub // to delete funtion?
+	// return null;
+	// }
 
 	@Override
-	public Costumer getCostumer(int connectionId) {
-		// TODO Auto-generated method stub
-		return null;
+	public void AddHandler(int connectionId, ConnectionHandler<MyMessage> handler) {
+		handlersMap.put(connectionId, handler);
+
+	}
+
+	@Override
+	public void RemoveHandler(int connectionId) {
+		handlersMap.remove(connectionId);
 	}
 
 }

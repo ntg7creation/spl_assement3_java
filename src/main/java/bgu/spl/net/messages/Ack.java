@@ -4,10 +4,12 @@ public class Ack implements MyMessage {
 
 	private MessageOp hisType;
 	private String opption;
+	private byte[] moreStuff;
 
 	public Ack(MessageOp mytype, byte[] moreStuff, String opption) {
 		this.hisType = mytype;
 		this.opption = opption;
+		this.moreStuff = moreStuff;
 	}
 
 	public Ack(MessageOp mytype) {
@@ -33,8 +35,6 @@ public class Ack implements MyMessage {
 		return null;
 	}
 
-
-
 	@Override
 	public byte[] encode() {
 
@@ -46,6 +46,11 @@ public class Ack implements MyMessage {
 		b[2] = (byte) (number & 0xff);
 		b[3] = (byte) ((number >> 8) & 0xff);
 		int fill = 4;
+		for (byte c : moreStuff) {
+			b[fill] = c;
+			fill++;
+		}
+
 		for (byte c : opption.getBytes()) {
 			b[fill] = c;
 			fill++;
