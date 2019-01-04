@@ -18,8 +18,8 @@ public class ReactorMain {
 		final Supplier<BidiMessagingProtocol<MyMessage>> protocolFactory;
 		final Supplier<MessageEncoderDecoder<MyMessage>> encdecFactory;
 
-		Server.reactor(Integer.parseInt(args[1]),Integer.parseInt(args[0]),
-				protocolFactory, encdecFactory).serve();
+//		Server.reactor(Integer.parseInt(args[1]),Integer.parseInt(args[0]),
+//				protocolFactory, encdecFactory).serve();
 
 	}
 
