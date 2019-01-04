@@ -20,23 +20,29 @@ public class Reactor<T> implements Server<T> {
 	private final int port;
 	private final Supplier<MessagingProtocol<T>> protocolFactory;
 	private final Supplier<MessageEncoderDecoder<T>> readerFactory;
+
 	private final MySupplier<T> HandlerFactory;
 	private final ActorThreadPool pool;
 	private final Connections<T> myConnections;
+
 	private Selector selector;
 
 	private Thread selectorThread;
 	private final ConcurrentLinkedQueue<Runnable> selectorTasks = new ConcurrentLinkedQueue<>();
 
 	public Reactor(int numThreads, int port, Supplier<MessagingProtocol<T>> protocolFactory,
-			Supplier<MessageEncoderDecoder<T>> readerFactory, MySupplier<T> HandlerFactory,Connections<T> myConnections) {
+
+			Supplier<MessageEncoderDecoder<T>> readerFactory, MySupplier<T> HandlerFactory,
+			Connections<T> myConnections) {
 
 		this.pool = new ActorThreadPool(numThreads);
 		this.port = port;
 		this.protocolFactory = protocolFactory;
 		this.readerFactory = readerFactory;
+
 		this.HandlerFactory = HandlerFactory;
 		this.myConnections = myConnections;
+
 	}
 
 	@Override
@@ -97,8 +103,10 @@ public class Reactor<T> implements Server<T> {
 	private void handleAccept(ServerSocketChannel serverChan, Selector selector) throws IOException {
 		SocketChannel clientChan = serverChan.accept();
 		clientChan.configureBlocking(false);
-		final MyNonBlockingConnectionHandler handler =HandlerFactory.get(readerFactory.get(),
-				protocolFactory.get(), clientChan, this,myConnections);
+
+		final MyNonBlockingConnectionHandler handler = HandlerFactory.get(readerFactory.get(), protocolFactory.get(),
+				clientChan, this, myConnections);
+
 		clientChan.register(selector, SelectionKey.OP_READ, handler);
 	}
 
