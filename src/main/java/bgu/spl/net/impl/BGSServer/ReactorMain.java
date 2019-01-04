@@ -35,6 +35,7 @@ public class ReactorMain {
 		final MySupplier<MyMessage> HandlerFactory = new MyHandlerFactory();
 		final Connections<MyMessage> myConnections = new Connectionimpl();
 		Server<MyMessage> s = Server.reactor(Integer.parseInt(args[1]), Integer.parseInt(args[0]), protocolFactory, readerFactory, HandlerFactory, myConnections);
+		s.serve();
 
 	}
 
