@@ -193,11 +193,20 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 			byte[] bytes = new byte[8];
 			short opcode = (short) MessageOp.Stats.getValue();
 			short numOfPosts =(short) myConnection.getCostumer(myconnectionID).getnumOfPosts();
+			short numOfFollowers = (short) myConnection.getCostumer(myconnectionID).getFollwerList().size();
+			short numOfFollowing = (short) myConnection.getCostumer(myconnectionID).getFollwingList().size();
+			
 			bytes[0] = (byte) (opcode & 0xff);
-			bytes[1] =  (byte) ((opcode >> 8) & 0xff);
-			bytes[2] =
-			bytes[3] =
-			} else
+			bytes[1] = (byte) ((opcode >> 8) & 0xff);
+			bytes[2] = (byte) (numOfPosts & 0xff);
+			bytes[3] = (byte) ((numOfPosts >> 8) & 0xff);
+			bytes[4] = (byte) (numOfFollowers & 0xff);
+			bytes[5] = (byte) ((numOfFollowers >> 8) & 0xff);
+			bytes[6] = (byte) (numOfFollowing & 0xff);
+			bytes[7] = (byte) ((numOfFollowing >> 8) & 0xff);
+			myConnection.send(myconnectionID, new Ack(MessageOp.User, bytes,""));
+			
+					} else
 				myConnection.send(myconnectionID, new Error((short) MessageOp.User.getValue()));
 			
 		};

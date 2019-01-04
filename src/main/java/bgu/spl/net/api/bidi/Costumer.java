@@ -72,6 +72,10 @@ public class Costumer {
 	public List<String> getFollwerList() {
 		return myfollwers;
 	}
+	
+	public List<String> getFollwingList() {
+		return followList;
+	}
 
 	public void addMessage(MyMessage msg) {
 		this.messageList.add(msg);
