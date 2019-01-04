@@ -73,10 +73,10 @@ public class Connectionimpl implements Connections<MyMessage> {
 		return false;
 	}
 
-	// @Override
-	// public Costumer getCostumer(String userName) {
-	// return userMap.get(userName);
-	// }
+	 
+	 private Costumer getCostumer(String userName) {
+	 return userMap.get(userName);
+	 }
 
 	@Override
 	public void post(int connection, String msg, List<String> to) {
@@ -137,6 +137,9 @@ public class Connectionimpl implements Connections<MyMessage> {
 	public List<String> follow(int connectionId, List<String> names) {
 		List<String> added = new ArrayList<String>();
 		added = this.getCostumer(connectionId).insertFollow(names);
+		for (String user: added) {
+			this.getCostumer(user).insertFollower(this.logedInMap.get(connectionId));
+		}
 		return added;
 	}
 
@@ -144,14 +147,13 @@ public class Connectionimpl implements Connections<MyMessage> {
 	public List<String> unfollow(int connectionId, List<String> names) {
 		List<String> deleted = new ArrayList<String>();
 		deleted = this.getCostumer(connectionId).deleteFollow(names);
+		for (String user: deleted) {
+			this.getCostumer(user).deleteFollower(this.logedInMap.get(connectionId));
+		}
 		return deleted;
 	}
 
-	// @Override
-	// public Costumer getCostumer(int connectionId) {
-	// // TODO Auto-generated method stub // to delete funtion?
-	// return null;
-	// }
+
 
 	private Costumer getCostumer(int connectionId) {
 		return this.userMap.get(logedInMap.get(connectionId));
