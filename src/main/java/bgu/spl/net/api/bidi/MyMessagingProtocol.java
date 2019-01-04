@@ -1,7 +1,8 @@
 package bgu.spl.net.api.bidi;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import bgu.spl.net.messages.Ack;
 import bgu.spl.net.messages.Error;
@@ -99,7 +100,8 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 		return () -> {
 			boolean isExist = this.myConnection.isInUserList((String) msg.get1());
 			if (isExist) {
-				boolean secLog = this.myConnection.insertToLogedIn(myconnectionID, (String) msg.get1(), (String)msg.get2());
+				boolean secLog = this.myConnection.insertToLogedIn(myconnectionID, (String) msg.get1(),
+						(String) msg.get2());
 				if (!secLog) {
 					myConnection.send(myconnectionID, new Error((short) msg.get_type().getValue()));
 				} else {
@@ -114,25 +116,24 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 	private Runnable LogoutAction() {
 		return () -> {
-			if (myConnection.isLogedIn(myconnectionID) && myConnection.logout(myconnectionID))
+			if (myConnection.isLogedIn(myconnectionID) && myConnection.logout(myconnectionID)) {
 				myConnection.send(myconnectionID, new Ack(MessageOp.Logout));
-			else
+				wantToTerminate = true;
+			} else
 				myConnection.send(myconnectionID, new Error((short) MessageOp.Logout.getValue()));
 		};
 	}
 
 	private Runnable FollowAction() {
-		return () -> { 
+		return () -> {
 
 			if (myConnection.isLogedIn(myconnectionID)) {
-				if ((int)msg.get1() == 0) {
+				if ((byte) msg.get1() == 0) {
 					myConnection.follow(myconnectionID, (List<String>) msg.get3());
-				}
-				else {
+				} else {
 					myConnection.unfollow(myconnectionID, (List<String>) msg.get3());
 				}
-			}
-			else {
+			} else {
 				myConnection.send(myconnectionID, new Error((short) msg.get_type().getValue()));
 			}
 
@@ -142,8 +143,16 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 	private Runnable PostAction() {
 		return () -> {
 			if (myConnection.isLogedIn(myconnectionID)) {
+				List<String> usernames = new LinkedList<>();
+				String msgWithoutnames = "";
+				for (String s : ((String) msg.get1()).split(" ")) {
+					if (s.charAt(0) == '@')
+						usernames.add(s.substring(1));
+					else
+						msgWithoutnames += s + " ";
+				}
 
-				myConnection.post(myconnectionID, (String) msg.get1(), (List<String>) msg.get2());
+				myConnection.post(myconnectionID, (String) msg.get1(), usernames);
 				myConnection.send(myconnectionID, new Ack(MessageOp.Post));
 			} else
 				myConnection.send(myconnectionID, new Error((short) MessageOp.Post.getValue()));
@@ -152,10 +161,9 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 	private Runnable PMAction() {
 		return () -> {
-			if (myConnection.isLogedIn(myconnectionID)&& myConnection.isInUserList((String)msg.get1())) {
-				
+			if (myConnection.isLogedIn(myconnectionID) && myConnection.isInUserList((String) msg.get1())) {
 
-				myConnection.send((String)msg.get1(), (String) msg.get2());
+				myConnection.send((String) msg.get1(), (String) msg.get2(), (byte) 0);
 				myConnection.send(myconnectionID, new Ack(MessageOp.PM));
 			} else
 				myConnection.send(myconnectionID, new Error((short) MessageOp.PM.getValue()));
@@ -163,10 +171,9 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 	}
 
 	private Runnable UserAction() {
-
 		return () -> {
 			if (myConnection.isLogedIn(myconnectionID)) {
-				List<String> users = myConnection.getNames();
+				Set<String> users = myConnection.getNames();
 				String names = "";
 				short number = 0;
 				byte[] inbytes = new byte[2];
