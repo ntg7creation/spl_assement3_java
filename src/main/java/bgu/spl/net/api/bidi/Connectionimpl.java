@@ -155,7 +155,7 @@ public class Connectionimpl implements Connections<MyMessage> {
 
 
 
-	private Costumer getCostumer(int connectionId) {
+	public Costumer getCostumer(int connectionId) {
 		return this.userMap.get(logedInMap.get(connectionId));
 	}
 

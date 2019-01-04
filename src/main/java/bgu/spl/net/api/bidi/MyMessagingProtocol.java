@@ -3,6 +3,7 @@ package bgu.spl.net.api.bidi;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import bgu.spl.net.messages.Ack;
 import bgu.spl.net.messages.Error;
@@ -69,14 +70,6 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 			return StatsAction();
 		case Notification:
-
-			return NotificationAction();
-		case Ack:
-
-			return AckAction();
-		case Error:
-
-			return ErrorAction();
 		default:
 
 		}
@@ -106,6 +99,10 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 					myConnection.send(myconnectionID, new Error((short) msg.get_type().getValue()));
 				} else {
 					myConnection.send(myconnectionID, new Ack(msg.get_type()));
+					ConcurrentLinkedQueue<MyMessage> msgList = myConnection.getCostumer(myconnectionID).getMessageList();
+					while (!msgList.isEmpty()) {
+						myConnection.send(myconnectionID,msgList.poll());
+					}
 				}
 
 			} else {
@@ -192,21 +189,17 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 
 	private Runnable StatsAction() {
 		return () -> {
+			if (myConnection.isLogedIn(myconnectionID)) {
+			byte[] bytes = new byte[8];
+			short opcode = (short) MessageOp.Stats.getValue();
+			bytes[0] = (byte) (opcode & 0xff);
+			bytes[1] =  (byte) ((opcode >> 8) & 0xff);
+			bytes[2] =
+			bytes[3] =
+			} else
+				myConnection.send(myconnectionID, new Error((short) MessageOp.User.getValue()));
+			
 		};
 	}
 
-	private Runnable NotificationAction() {
-		return () -> {
-		};
-	}
-
-	private Runnable AckAction() {
-		return () -> {
-		};
-	}
-
-	private Runnable ErrorAction() {
-		return () -> {
-		};
-	}
 }

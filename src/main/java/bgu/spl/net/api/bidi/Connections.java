@@ -31,9 +31,9 @@ public interface Connections<T> {
 
 	List<String> unfollow(int connectionId, List<String> names);
 
-	// Costumer getCostumer(String userName);
+	//Costumer getCostumer(String userName);
 
-	//Costumer getCostumer(int connectionId);
+	Costumer getCostumer(int connectionId);
 
 	Set<String> getNames();
 

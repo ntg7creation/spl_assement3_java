@@ -14,6 +14,7 @@ public class Costumer {
 	private String password;
 	private List<String> followList;
 	private List<String> myfollwers;
+	private int numOfPosts;
 	private ConcurrentLinkedQueue<MyMessage> messageList;
 
 	public Costumer(String userName, String password) {
@@ -22,6 +23,7 @@ public class Costumer {
 		followList = new LinkedList<>();
 		myfollwers = new LinkedList<>();
 		messageList = new ConcurrentLinkedQueue<>();
+		numOfPosts= 0;
 	}
 
 	public Boolean cheackPassword(String enteredPassword) {
@@ -82,6 +84,10 @@ public class Costumer {
 
 	public void setLastConnectedID(int lastConnectedID) {
 		LastConnectedID = lastConnectedID;
+	}
+	
+	public ConcurrentLinkedQueue<MyMessage> getMessageList(){
+		return messageList;
 	}
 
 }
