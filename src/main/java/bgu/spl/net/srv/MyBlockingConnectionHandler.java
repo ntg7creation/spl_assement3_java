@@ -20,14 +20,18 @@ public class MyBlockingConnectionHandler implements Runnable, ConnectionHandler<
 	private BufferedOutputStream out;
 	private volatile boolean connected = true;
 	private static int connectionID = 1;
+	private int myID;
+	private Connections<MyMessage> connections;
 
 	public MyBlockingConnectionHandler(Socket sock, MessageEncoderDecoder<MyMessage> reader,
 			BidiMessagingProtocol<MyMessage> protocol, Connections<MyMessage> connections) {
 		this.sock = sock;
 		this.encdec = reader;
 		this.protocol = protocol;
-		protocol.start(connectionID, connections);
-		connectionID++;
+		this.connections = connections;
+		myID = connectionID++;
+		connections.AddHandler(myID, this);
+		protocol.start(myID, connections);
 	}
 
 	@Override
@@ -58,6 +62,7 @@ public class MyBlockingConnectionHandler implements Runnable, ConnectionHandler<
 	@Override
 	public void close() throws IOException {
 		connected = false;
+		connections.RemoveHandler(myID);
 		sock.close();
 	}
 

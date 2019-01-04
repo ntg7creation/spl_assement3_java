@@ -24,6 +24,8 @@ public class MyNonBlockingConnectionHandler implements ConnectionHandler<MyMessa
 	private final Queue<ByteBuffer> writeQueue = new ConcurrentLinkedQueue<>();
 	private final SocketChannel chan;
 	private final Reactor<MyMessage> reactor;
+	private Connections<MyMessage> connections;
+	private int myID;
 
 	public MyNonBlockingConnectionHandler(MessageEncoderDecoderImp reader, MyMessagingProtocol protocol,
 			SocketChannel chan, Reactor<MyMessage> reactor, Connections<MyMessage> connections) {
@@ -31,8 +33,10 @@ public class MyNonBlockingConnectionHandler implements ConnectionHandler<MyMessa
 		this.encdec = reader;
 		this.protocol = protocol;
 		this.reactor = reactor;
-		protocol.start(connectionID, connections);
-		connectionID++;
+		this.connections = connections;
+		myID = connectionID++;
+		connections.AddHandler(myID, this);
+		protocol.start(myID, connections);
 	}
 
 	public Runnable continueRead() {
@@ -74,6 +78,7 @@ public class MyNonBlockingConnectionHandler implements ConnectionHandler<MyMessa
 
 	public void close() {
 		try {
+			connections.RemoveHandler(myID);
 			chan.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();

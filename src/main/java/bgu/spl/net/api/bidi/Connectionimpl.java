@@ -111,11 +111,11 @@ public class Connectionimpl implements Connections<MyMessage> {
 			return true;
 		}
 		return false;
-//		else {
-//			Costumer newcostumer = new Costumer(userName, password);
-//			userMap.put(userName, newcostumer);
-//			return true;
-//		}
+		// else {
+		// Costumer newcostumer = new Costumer(userName, password);
+		// userMap.put(userName, newcostumer);
+		// return true;
+		// }
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class Connectionimpl implements Connections<MyMessage> {
 		return userMap.keySet();
 	}
 
-	//never used
+	// never used
 	@Override
 	public void broadcast(MyMessage msg) {
 		Set<Integer> all_log_in = logedInMap.keySet();
@@ -136,7 +136,7 @@ public class Connectionimpl implements Connections<MyMessage> {
 	@Override
 	public List<String> follow(int connectionId, List<String> names) {
 		List<String> added = new ArrayList<String>();
-		added =	this.getCostumer(connectionId).insertFollow(names);
+		added = this.getCostumer(connectionId).insertFollow(names);
 		return added;
 	}
 
@@ -153,10 +153,10 @@ public class Connectionimpl implements Connections<MyMessage> {
 	// return null;
 	// }
 
-
 	private Costumer getCostumer(int connectionId) {
 		return this.userMap.get(logedInMap.get(connectionId));
 	}
+
 	public void AddHandler(int connectionId, ConnectionHandler<MyMessage> handler) {
 		handlersMap.put(connectionId, handler);
 
