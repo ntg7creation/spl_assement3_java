@@ -15,7 +15,7 @@ import bgu.spl.net.srv.Reactor;
 
 public interface MySupplier<T> {
 
-	MyNonBlockingConnectionHandler get(MessageEncoderDecoder<T> endec, MessagingProtocol<T> protocol,
+	MyNonBlockingConnectionHandler get(MessageEncoderDecoder<T> endec, BidiMessagingProtocol<T> protocol,
 			SocketChannel sock, Reactor<T> reactor, Connections<T> connections);
 
 	MyBlockingConnectionHandler get(MessageEncoderDecoder<T> endec, BidiMessagingProtocol<T> protocol,

@@ -2,6 +2,7 @@ package bgu.spl.net.srv;
 
 import bgu.spl.net.api.MessageEncoderDecoder;
 import bgu.spl.net.api.MessagingProtocol;
+import bgu.spl.net.api.bidi.BidiMessagingProtocol;
 import bgu.spl.net.api.bidi.Connections;
 import bgu.spl.net.srv.bidi.MySupplier;
 
@@ -18,7 +19,7 @@ import java.util.function.Supplier;
 public class Reactor<T> implements Server<T> {
 
 	private final int port;
-	private final Supplier<MessagingProtocol<T>> protocolFactory;
+	private final Supplier<BidiMessagingProtocol<T>> protocolFactory;
 	private final Supplier<MessageEncoderDecoder<T>> readerFactory;
 
 	private final MySupplier<T> HandlerFactory;
@@ -30,7 +31,7 @@ public class Reactor<T> implements Server<T> {
 	private Thread selectorThread;
 	private final ConcurrentLinkedQueue<Runnable> selectorTasks = new ConcurrentLinkedQueue<>();
 
-	public Reactor(int numThreads, int port, Supplier<MessagingProtocol<T>> protocolFactory,
+	public Reactor(int numThreads, int port, Supplier<BidiMessagingProtocol<T>> protocolFactory,
 
 			Supplier<MessageEncoderDecoder<T>> readerFactory, MySupplier<T> HandlerFactory,
 			Connections<T> myConnections) {
