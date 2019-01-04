@@ -23,15 +23,7 @@ public class Error implements MyMessage {
 	public Object get3() {
 		throw new IllegalArgumentException("Notification messege dosent have a 3'th element");
 	}
-
-	public Object get4() {
-		throw new IllegalArgumentException("Notification messege dosent have a 4'th element");
-	}
-
-	public Object get5() {
-		throw new IllegalArgumentException("Notification messege dosent have a 5'th element");
-	}
-
+//hj
 	@Override
 	public byte[] encode() {
 		throw new IllegalArgumentException("Error has no use to encode function, the constructor does it");
