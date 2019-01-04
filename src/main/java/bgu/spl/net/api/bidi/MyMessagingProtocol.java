@@ -192,6 +192,7 @@ public class MyMessagingProtocol implements BidiMessagingProtocol<MyMessage> {
 			if (myConnection.isLogedIn(myconnectionID)) {
 			byte[] bytes = new byte[8];
 			short opcode = (short) MessageOp.Stats.getValue();
+			short numOfPosts =(short) myConnection.getCostumer(myconnectionID).getnumOfPosts();
 			bytes[0] = (byte) (opcode & 0xff);
 			bytes[1] =  (byte) ((opcode >> 8) & 0xff);
 			bytes[2] =
