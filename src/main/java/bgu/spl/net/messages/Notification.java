@@ -33,17 +33,10 @@ public class Notification implements MyMessage {
 		throw new IllegalArgumentException("Notification messege dosent have a 3'th element");
 	}
 
-	public Object get4() {
-		throw new IllegalArgumentException("Notification messege dosent have a 4'th element");
-	}
-
-	public Object get5() {
-		throw new IllegalArgumentException("Notification messege dosent have a 5'th element");
-	}
 
 	@Override
 	public byte[] encode() {
-	
+	//test
 	byte[] encodedmsg = new byte[2 + messageEncode.length];
 	
 		// TODO Auto-generated method stub
@@ -53,5 +46,17 @@ public class Notification implements MyMessage {
 	@Override
 	public MessageOp get_type() {
 		return MessageOp.Notification;
+	}
+
+	@Override
+	public Object get4() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object get5() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

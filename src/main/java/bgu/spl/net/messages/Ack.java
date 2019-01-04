@@ -7,6 +7,7 @@ public class Ack implements MyMessage {
 
 	public Ack(MessageOp mytype, byte[] moreStuff, String opption) {
 		this.hisType = mytype;
+		//TODO lll
 		this.opption = opption;
 	}
 

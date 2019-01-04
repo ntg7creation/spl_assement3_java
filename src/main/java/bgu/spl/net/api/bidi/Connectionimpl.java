@@ -1,5 +1,6 @@
 package bgu.spl.net.api.bidi;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -81,8 +82,13 @@ public class Connectionimpl implements Connections<MyMessage>{
 
 	@Override
 	public boolean insertToUserList(String userName, String password) {
-		// TODO Auto-generated method stub
+		if (userMap.containsKey(userName))
 		return false;
+		else {
+			Costumer newcostumer = new Costumer(userName, password);
+			userMap.put(userName, newcostumer);
+			return true;
+		}
 	}
 
 
@@ -111,8 +117,9 @@ public class Connectionimpl implements Connections<MyMessage>{
 
 	@Override
 	public List<String> follow(int connectionId, List<String> names) {
-		
-		return null;
+		List<String> added = new ArrayList<String>();
+		added =	this.getCostumer(connectionId).insertFollow(names);
+		return added;
 	}
 
 
@@ -120,8 +127,9 @@ public class Connectionimpl implements Connections<MyMessage>{
 
 	@Override
 	public List<String> unfollow(int connectionId, List<String> names) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> deleted = new ArrayList<String>();
+		deleted = this.getCostumer(connectionId).deleteFollow(names);
+		return deleted;
 	}
 
 
@@ -129,8 +137,7 @@ public class Connectionimpl implements Connections<MyMessage>{
 
 	@Override
 	public Costumer getCostumer(int connectionId) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.userMap.get(logedInMap.get(connectionId));
 	}
 
 }
