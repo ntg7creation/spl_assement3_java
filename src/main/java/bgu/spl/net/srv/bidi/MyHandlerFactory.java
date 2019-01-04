@@ -17,7 +17,7 @@ public class MyHandlerFactory implements MySupplier<MyMessage> {
 
 	@Override
 	public MyNonBlockingConnectionHandler get(MessageEncoderDecoder<MyMessage> endec,
-			MessagingProtocol<MyMessage> protocol, SocketChannel chan, Reactor<MyMessage> reactor,
+			BidiMessagingProtocol<MyMessage> protocol, SocketChannel chan, Reactor<MyMessage> reactor,
 			Connections<MyMessage> connections) {
 		return new MyNonBlockingConnectionHandler(endec, (MyMessagingProtocol) protocol, chan, reactor, connections);
 

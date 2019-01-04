@@ -3,14 +3,12 @@ package bgu.spl.net.messages;
 public class Error implements MyMessage {
 
 	private byte[] messageOpcode;
-	
 
 	public Error(Short messageType) {
 		messageOpcode = new byte[2];
-		messageOpcode[0] = (byte)((messageType >> 8) & 0xFF);
-		messageOpcode[1] = (byte)(messageType & 0xFF);
+		messageOpcode[0] = (byte) ((messageType >> 8) & 0xFF);
+		messageOpcode[1] = (byte) (messageType & 0xFF);
 	}
-
 
 	public Object get1() {
 		return messageOpcode;

@@ -1,14 +1,24 @@
+import java.util.function.Supplier;
+
+import bgu.spl.net.api.MessageEncoderDecoder;
+import bgu.spl.net.api.MessageEncoderDecoderImp;
 import bgu.spl.net.api.bidi.BidiMessagingProtocol;
+import bgu.spl.net.api.bidi.Connectionimpl;
+import bgu.spl.net.api.bidi.Connections;
 import bgu.spl.net.api.bidi.MyMessagingProtocol;
-import bgu.spl.net.messages.Login;
 import bgu.spl.net.messages.MyMessage;
 import bgu.spl.net.messages.Register;
+import bgu.spl.net.srv.Reactor;
+import bgu.spl.net.srv.Server;
+import bgu.spl.net.srv.bidi.MyHandlerFactory;
+import bgu.spl.net.srv.bidi.MySupplier;
 
 public class testClass {
 
 	public static void main(String agr[]) {
-		byte testnumber =1;
-		System.out.println(testnumber);
+		
+
+		new Reactor<MyMessage>(4, 7777, protocolFactory, readerFactory, HandlerFactory, myConnections);
 	}
 
 	private void test_2() {

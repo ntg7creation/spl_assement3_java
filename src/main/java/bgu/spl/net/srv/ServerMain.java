@@ -1,9 +1,5 @@
 package bgu.spl.net.srv;
 
-import bgu.spl.net.impl.newsfeed.NewsFeed;
-import bgu.spl.net.impl.rci.ObjectEncoderDecoder;
-import bgu.spl.net.impl.rci.RemoteCommandInvocationProtocol;
-
 public class ServerMain {
 
 	public static void main(String[] args) {

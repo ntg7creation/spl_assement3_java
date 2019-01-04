@@ -4,9 +4,13 @@ import java.io.Closeable;
 import java.util.function.Supplier;
 
 import bgu.spl.net.api.MessageEncoderDecoder;
-import bgu.spl.net.api.MessagingProtocol;
+import bgu.spl.net.api.MessageEncoderDecoderImp;
 import bgu.spl.net.api.bidi.BidiMessagingProtocol;
+import bgu.spl.net.api.bidi.Connectionimpl;
 import bgu.spl.net.api.bidi.Connections;
+import bgu.spl.net.api.bidi.MyMessagingProtocol;
+import bgu.spl.net.messages.MyMessage;
+import bgu.spl.net.srv.bidi.MyHandlerFactory;
 import bgu.spl.net.srv.bidi.MySupplier;
 
 public interface Server<T> extends Closeable {
@@ -55,9 +59,13 @@ public interface Server<T> extends Closeable {
 	 *            The Message Object for the protocol
 	 * @return A new reactor server
 	 */
-	public static <T> Server<T> reactor(int nthreads, int port, Supplier<MessagingProtocol<T>> protocolFactory,
-			Supplier<MessageEncoderDecoder<T>> encoderDecoderFactory, MySupplier<T> s, Connections<T> c) {
-		return new Reactor<T>(nthreads, port, protocolFactory, encoderDecoderFactory, s, c);
+	public static <T> Server<T> reactor(int n, int port, Supplier<BidiMessagingProtocol<T>> f,
+			Supplier<MessageEncoderDecoder<T>> e, MySupplier<T> s, Connections<T> c) {
+		return new Reactor<T>(n, port, f, e, s, c);
 	}
+
+
+
+
 
 }
