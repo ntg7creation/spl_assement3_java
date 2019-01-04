@@ -18,7 +18,6 @@ public class testClass {
 	public static void main(String agr[]) {
 		
 
-		new Reactor<MyMessage>(4, 7777, protocolFactory, readerFactory, HandlerFactory, myConnections);
 	}
 
 	private void test_2() {

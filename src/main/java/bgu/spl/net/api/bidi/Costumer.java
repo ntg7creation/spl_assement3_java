@@ -23,7 +23,7 @@ public class Costumer {
 		followList = new LinkedList<>();
 		myfollwers = new LinkedList<>();
 		messageList = new ConcurrentLinkedQueue<>();
-		numOfPosts= 0;
+		numOfPosts = 0;
 	}
 
 	public Boolean cheackPassword(String enteredPassword) {
@@ -69,11 +69,10 @@ public class Costumer {
 
 	}
 
-	public List<String> getFollwerList()
-	{
+	public List<String> getFollwerList() {
 		return myfollwers;
 	}
-	
+
 	public void addMessage(MyMessage msg) {
 		this.messageList.add(msg);
 	}
@@ -85,9 +84,17 @@ public class Costumer {
 	public void setLastConnectedID(int lastConnectedID) {
 		LastConnectedID = lastConnectedID;
 	}
-	
-	public ConcurrentLinkedQueue<MyMessage> getMessageList(){
+
+	public ConcurrentLinkedQueue<MyMessage> getMessageList() {
 		return messageList;
+	}
+
+	public void incNumOfPosts() {
+		numOfPosts++;
+	}
+
+	public int getnumOfPosts() {
+		return numOfPosts;
 	}
 
 }
